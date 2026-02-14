@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}계약서 템플릿 - Argent AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">계약서 템플릿</h1>
+    </div>
+    <div class="info-box" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #2196f3; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+            <h4 style="margin: 0; color: #1565c0; font-weight: 600;">계약서 템플릿 안내</h4>
+        </div>
+        <p style="margin: 0; color: #0d47a1; font-size: 1rem; line-height: 1.6;">
+            다양한 계약서 템플릿을 제공합니다. 필요에 맞는 템플릿을 선택하여 사용하세요. 
+            <strong>12개 카테고리</strong>의 전문적인 계약서 템플릿을 통해 효율적인 계약서 작성이 가능합니다.
+        </p>
+    </div>
+    
+    
+    <div class="warning-box" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border: 2px solid #f39c12; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+            <h4 style="margin: 0; color: #d68910; font-weight: 600;">중요한 안내사항</h4>
+        </div>
+        <div style="color: #856404; font-size: 0.95rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.5rem 0;">
+                제공되는 템플릿은 참고용이며, 실제 사용 시 반드시 법률 전문가의 검토를 받으시기 바랍니다.
+            </p>
+            <p style="margin: 0 0 0.5rem 0;">
+                이 시스템은 윤리적 AI 원칙에 따라 개발되었으며, 사용자의 프라이버시와 데이터 보안을 최우선으로 합니다.
+            </p>
+            <p style="margin: 0;">
+                최종 계약의 법적 효력과 관련된 모든 책임은 사용자에게 있습니다.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">템플릿 카테고리</h2>
+        <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.9rem;">
+            총 12개의 전문 계약서 템플릿을 카테고리별로 제공합니다
+        </p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        <div style="padding: 1.5rem; border: 2px solid #e3f2fd; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem; display: flex; align-items: center;">
+                부동산
+            </h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('real_estate_sale')" class="btn btn-secondary template-btn" style="width: 100%; text-align: left; padding: 0.75rem; border-radius: 8px; transition: all 0.2s ease; border: 1px solid #dee2e6;">
+                        부동산 매매계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('real_estate_lease')" class="btn btn-secondary" style="width: 100%; text-align: left; padding: 0.75rem; border-radius: 8px; transition: all 0.2s ease; border: 1px solid #dee2e6;">
+                        부동산 임대차계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('construction_contract')" class="btn btn-secondary" style="width: 100%; text-align: left; padding: 0.75rem; border-radius: 8px; transition: all 0.2s ease; border: 1px solid #dee2e6;">
+                        건설공사계약서
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 2px solid #e3f2fd; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem; display: flex; align-items: center;">
+                고용
+            </h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('employment_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        고용계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('part_time_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        시간제 근로계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('consulting_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        컨설팅 계약서
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 2px solid #e3f2fd; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem; display: flex; align-items: center;">
+                기업
+            </h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('investment_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        투자계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('partnership_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        파트너십 계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('nda_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        기밀유지계약서
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 2px solid #e3f2fd; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem; display: flex; align-items: center;">
+                금전거래
+            </h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('loan_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        대출계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('guarantee_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        보증계약서
+                    </button>
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                    <button onclick="downloadTemplate('payment_contract')" class="btn btn-secondary" style="width: 100%; text-align: left;">
+                        지급계약서
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">맞춤형 템플릿 생성</h2>
+        <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.9rem;">
+            AI를 활용하여 사용자의 요구사항에 맞는 개인화된 계약서 템플릿을 생성합니다
+        </p>
+    </div>
+    
+    <form id="custom-template-form">
+        <div class="form-group">
+            <label for="contract-type" class="form-label">계약서 유형</label>
+            <select id="contract-type" name="type" class="form-input" required>
+                <option value="">계약서 유형을 선택하세요</option>
+                <option value="real_estate">부동산</option>
+                <option value="employment">고용</option>
+                <option value="business">기업</option>
+                <option value="financial">금전거래</option>
+                <option value="service">용역</option>
+                <option value="other">기타</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="contract-details" class="form-label">계약서 세부사항</label>
+            <textarea id="contract-details" name="details" class="form-input form-textarea" placeholder="계약서의 주요 내용이나 특별한 요구사항을 입력하세요..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">맞춤형 템플릿 생성</button>
+    </form>
+</div>
+
+<div id="custom-template-result" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">생성된 템플릿</h2>
+        </div>
+        <div id="template-content"></div>
+        <button onclick="downloadCustomTemplate()" class="btn btn-primary">템플릿 다운로드</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* 템플릿 카테고리 박스 호버 효과 */
+.template-category {
+    transition: all 0.3s ease;
+}
+
+.template-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #2196f3;
+}
+
+/* 버튼 호버 효과 */
+.template-btn {
+    transition: all 0.2s ease;
+}
+
+.template-btn:hover {
+    background-color: #007bff !important;
+    color: white !important;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 경고 메시지 애니메이션 */
+.warning-box {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 정보 박스 애니메이션 */
+.info-box {
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* 카테고리 박스 애니메이션 */
+.category-box {
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+</style>
+
+<script>
+function downloadTemplate(templateType) {
+    showMessage('템플릿을 다운로드하고 있습니다...', 'success');
+    
+    fetch(`/download_template/${templateType}`)
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        }
+        throw new Error('템플릿 다운로드에 실패했습니다.');
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${templateType}_template.docx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        showMessage('템플릿이 다운로드되었습니다!', 'success');
+    })
+    .catch(error => {
+        showMessage('템플릿 다운로드 중 오류가 발생했습니다.', 'error');
+        console.error('Error:', error);
+    });
+}
+
+document.getElementById('custom-template-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    showMessage('맞춤형 템플릿을 생성하고 있습니다...', 'success');
+    
+    fetch('/generate_template', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            showMessage('템플릿 생성 중 오류가 발생했습니다: ' + data.error, 'error');
+        } else {
+            displayCustomTemplate(data.template);
+            showMessage('맞춤형 템플릿이 생성되었습니다!', 'success');
+        }
+    })
+    .catch(error => {
+        showMessage('네트워크 오류가 발생했습니다. 다시 시도해주세요.', 'error');
+        console.error('Error:', error);
+    });
+});
+
+function displayCustomTemplate(template) {
+    const contentDiv = document.getElementById('template-content');
+    const resultDiv = document.getElementById('custom-template-result');
+    
+    contentDiv.innerHTML = `
+        <div style="white-space: pre-wrap; font-family: 'Courier New', monospace; background-color: #f8f9fa; padding: 1rem; border-radius: 4px; max-height: 400px; overflow-y: auto;">
+            ${template}
+        </div>
+    `;
+    
+    resultDiv.style.display = 'block';
+    resultDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadCustomTemplate() {
+    const templateContent = document.getElementById('template-content').textContent;
+    
+    const blob = new Blob([templateContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'custom_contract_template.txt';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    showMessage('맞춤형 템플릿이 다운로드되었습니다!', 'success');
+}
+</script>
+{% endblock %} 

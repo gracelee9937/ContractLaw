@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}계약서 분석 - Argent AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">계약서 분석</h1>
+    </div>
+    <p>계약서를 업로드하면 AI가 위험 요소와 개선점을 분석하여 제시합니다.</p>
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+        <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+            <strong>주의사항:</strong> AI 분석 결과는 참고용이며, 법률 전문가의 검토를 대체하지 않습니다. 
+            
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">계약서 업로드</h2>
+    </div>
+    
+    <form id="upload-form" enctype="multipart/form-data" novalidate>
+        <div class="form-group">
+            <label for="contract-file" class="form-label">계약서 파일 선택 (선택사항)</label>
+            <input type="file" id="contract-file" name="file" accept=".txt,.doc,.docx,.pdf" class="form-input" style="display: none;">
+            <button type="button" id="file-select-btn" class="btn btn-secondary" style="margin-right: 10px;">파일 선택</button>
+            <span id="file-name">선택된 파일 없음</span>
+            <small style="display: block; margin-top: 5px;">지원 형식: TXT, DOC, DOCX, PDF (최대 10MB)</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="contract-text" class="form-label">또는 계약서 내용 직접 입력</label>
+            <textarea id="contract-text" name="text" class="form-input form-textarea" placeholder="계약서 내용을 여기에 입력하세요..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">분석 시작</button>
+    </form>
+</div>
+
+<div id="analysis-results" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">분석 결과</h2>
+        </div>
+        <div id="results-content"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">분석 항목</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">위험도 평가</h3>
+            <p>계약서의 전반적인 위험도를 분석하여 등급을 매깁니다.</p>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">핵심 조항 분석</h3>
+            <p>계약서의 주요 조항들을 분석하고 중요도를 평가합니다.</p>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">누락 조항 확인</h3>
+            <p>일반적으로 포함되어야 할 조항이 누락되었는지 확인합니다.</p>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">개선 제안</h3>
+            <p>계약서의 개선점과 대안을 제시합니다.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 파일 선택 버튼 처리
+document.getElementById('file-select-btn').addEventListener('click', function() {
+    document.getElementById('contract-file').click();
+});
+
+// 파일 선택 시 파일명 표시
+document.getElementById('contract-file').addEventListener('change', function() {
+    const fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';
+    document.getElementById('file-name').textContent = fileName;
+});
+
+document.getElementById('upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('contract-file');
+    const textInput = document.getElementById('contract-text');
+    
+    // 브라우저 기본 검증 비활성화
+    fileInput.setCustomValidity('');
+    
+    // 텍스트 입력이 있으면 파일은 선택사항
+    if (!textInput.value.trim() && !fileInput.files[0]) {
+        showMessage('파일을 선택하거나 계약서 내용을 입력해주세요.', 'warning');
+        return;
+    }
+    
+    const formData = new FormData();
+    
+    // 텍스트가 있으면 텍스트를 우선으로 처리
+    if (textInput.value.trim()) {
+        formData.append('text', textInput.value.trim());
+        console.log('텍스트 입력 감지:', textInput.value.trim().substring(0, 50) + '...');
+    }
+    
+    // 파일이 있으면 추가로 첨부
+    if (fileInput.files[0]) {
+        formData.append('file', fileInput.files[0]);
+        console.log('파일 입력 감지:', fileInput.files[0].name);
+    }
+    
+    // 분석 시작
+    showMessage('계약서를 분석하고 있습니다...', 'success');
+    document.getElementById('analysis-results').style.display = 'none';
+    
+    fetch('/analyze', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            showMessage('분석 중 오류가 발생했습니다: ' + data.error, 'error');
+        } else {
+            displayResults(data);
+            showMessage('분석이 완료되었습니다!', 'success');
+        }
+    })
+    .catch(error => {
+        showMessage('네트워크 오류가 발생했습니다. 다시 시도해주세요.', 'error');
+        console.error('Error:', error);
+    });
+});
+
+function displayResults(data) {
+    const resultsDiv = document.getElementById('results-content');
+    const resultsContainer = document.getElementById('analysis-results');
+    
+    let html = '';
+    
+    // 위험도 평가
+    if (data.risk_assessment) {
+        html += `
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: #1F4E79; margin-bottom: 1rem;">위험도 평가</h3>
+                <div class="status-${getRiskClass(data.risk_assessment.risk_level)}">
+                    <strong>위험도:</strong> ${data.risk_assessment.risk_level} (${data.risk_assessment.score}/100)
+                </div>
+                <p style="margin-top: 1rem;">${data.risk_assessment.explanation}</p>
+            </div>
+        `;
+    }
+    
+    // 핵심 조항 분석
+    if (data.clause_analysis) {
+        html += `
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: #1F4E79; margin-bottom: 1rem;">핵심 조항 분석</h3>
+                <div style="display: grid; gap: 1rem;">
+        `;
+        
+        data.clause_analysis.forEach(clause => {
+            html += `
+                <div style="padding: 1rem; border: 1px solid #e9ecef; border-radius: 4px;">
+                    <h4 style="margin-bottom: 0.5rem;">${clause.name}</h4>
+                    <p><strong>중요도:</strong> ${clause.importance}</p>
+                    <p><strong>분석:</strong> ${clause.analysis}</p>
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    }
+    
+    // 누락 조항
+    if (data.missing_clauses && data.missing_clauses.length > 0) {
+        html += `
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: #1F4E79; margin-bottom: 1rem;">누락된 조항</h3>
+                <div class="status-warning">
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+        `;
+        
+        data.missing_clauses.forEach(clause => {
+            html += `<li>${clause}</li>`;
+        });
+        
+        html += '</ul></div></div>';
+    }
+    
+    // 개선 제안
+    if (data.improvements && data.improvements.length > 0) {
+        html += `
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: #1F4E79; margin-bottom: 1rem;">개선 제안</h3>
+                <div style="display: grid; gap: 1rem;">
+        `;
+        
+        data.improvements.forEach(improvement => {
+            html += `
+                <div style="padding: 1rem; border: 1px solid #e9ecef; border-radius: 4px;">
+                    <h4 style="margin-bottom: 0.5rem;">${improvement.title}</h4>
+                    <p>${improvement.description}</p>
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    }
+    
+    resultsDiv.innerHTML = html;
+    resultsContainer.style.display = 'block';
+    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+}
+
+function getRiskClass(riskLevel) {
+    switch(riskLevel.toLowerCase()) {
+        case '높음':
+        case 'high':
+            return 'error';
+        case '보통':
+        case 'medium':
+            return 'warning';
+        case '낮음':
+        case 'low':
+            return 'success';
+        default:
+            return 'info';
+    }
+}
+</script>
+{% endblock %} 

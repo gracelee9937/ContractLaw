@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}AI 챗봇 - Argent AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">AI와 대화하기</h1>
+    </div>
+    <p>계약서 관련 질문을 자유롭게 물어보세요. AI가 법률 지식을 바탕으로 답변을 제공합니다.</p>
+    <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+        <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+            <strong>주의사항:</strong> AI 답변은 참고용이며, 법률 전문가의 조언을 대체하지 않습니다. 
+           
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">대화</h2>
+    </div>
+    
+    <div id="chat-container" class="chat-container">
+        <div class="chat-message assistant">
+            <strong>AI:</strong> 안녕하세요! 계약서 관련 질문이 있으시면 언제든 물어보세요. 
+            예를 들어 "계약서 작성 시 주의사항은?", "부동산 임대차 계약서의 핵심 조항은?" 등입니다.
+        </div>
+    </div>
+    
+    <div class="chat-input-container">
+        <input type="text" id="question-input" class="form-input" placeholder="질문을 입력하세요..." onkeypress="handleKeyPress(event)">
+        <button onclick="askQuestion()" class="btn btn-primary">질문하기</button>
+        <button onclick="clearChat()" class="btn btn-secondary">대화 기록 삭제</button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">추천 질문</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+        <button onclick="askRecommendedQuestion('계약서 작성 시 주의해야 할 점은 무엇인가요?')" class="btn btn-secondary" style="text-align: left; justify-content: flex-start;">
+            <strong>계약서 작성 시 주의사항</strong><br>
+            <small>계약서 작성 시 기본적으로 확인해야 할 사항들</small>
+        </button>
+        <button onclick="askRecommendedQuestion('부동산 임대차 계약서의 핵심 조항은 무엇인가요?')" class="btn btn-secondary" style="text-align: left; justify-content: flex-start;">
+            <strong>부동산 임대차 계약서</strong><br>
+            <small>임대차 계약서의 주요 조항과 주의사항</small>
+        </button>
+        <button onclick="askRecommendedQuestion('채무불이행 시 대응방법은 무엇인가요?')" class="btn btn-secondary" style="text-align: left; justify-content: flex-start;">
+            <strong>채무불이행 대응</strong><br>
+            <small>계약 불이행 시 대응 방법과 법적 절차</small>
+        </button>
+        <button onclick="askRecommendedQuestion('고용계약서 작성 시 필수 조항은 무엇인가요?')" class="btn btn-secondary" style="text-align: left; justify-content: flex-start;">
+            <strong>고용계약서 필수조항</strong><br>
+            <small>근로기준법상 고용계약서 필수 기재사항</small>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let chatHistory = [];
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        askQuestion();
+    }
+}
+
+function askQuestion() {
+    const input = document.getElementById('question-input');
+    const question = input.value.trim();
+    
+    if (!question) {
+        showMessage('질문을 입력해주세요.', 'warning');
+        return;
+    }
+    
+    // 사용자 메시지 추가
+    addMessage('user', question);
+    input.value = '';
+    
+    // 로딩 표시
+    const loadingId = addMessage('assistant', '답변을 생성 중입니다...');
+    
+    // API 호출
+    fetch('/ask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: question })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 로딩 메시지 제거
+        removeMessage(loadingId);
+        
+        if (data.error) {
+            addMessage('assistant', '죄송합니다. 오류가 발생했습니다: ' + data.error);
+        } else {
+            // 근거 정보와 응답 시간을 포함한 답변 구성
+            let fullAnswer = data.answer;
+            
+            // 근거 정보가 있는 경우 추가
+            if (data.source_titles && data.source_titles.length > 0) {
+                fullAnswer += `\n\n<small style="color: #666; font-style: italic;">근거: ${data.source_titles.join(', ')}</small>`;
+            }
+            
+            // 응답 시간 추가
+            if (data.response_time) {
+                fullAnswer += `\n<small style="color: #999;">응답 시간: ${data.response_time}</small>`;
+            }
+            
+            addMessage('assistant', fullAnswer);
+        }
+    })
+    .catch(error => {
+        removeMessage(loadingId);
+        addMessage('assistant', '네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+        console.error('Error:', error);
+    });
+}
+
+function askRecommendedQuestion(question) {
+    document.getElementById('question-input').value = question;
+    askQuestion();
+}
+
+function addMessage(sender, content) {
+    const chatContainer = document.getElementById('chat-container');
+    const messageDiv = document.createElement('div');
+    const messageId = 'msg-' + Date.now();
+    messageDiv.id = messageId;
+    messageDiv.className = `chat-message ${sender}`;
+    
+    const senderLabel = sender === 'user' ? '사용자' : 'AI';
+    
+    // HTML 태그를 제대로 렌더링하도록 innerHTML 사용
+    messageDiv.innerHTML = `<strong>${senderLabel}:</strong> ${content}`;
+    
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // 채팅 기록에 추가
+    chatHistory.push({ sender, content, id: messageId });
+    
+    return messageId;
+}
+
+function removeMessage(messageId) {
+    const message = document.getElementById(messageId);
+    if (message) {
+        message.remove();
+    }
+}
+
+function clearChat() {
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.innerHTML = `
+        <div class="chat-message assistant">
+            <strong>AI:</strong> 안녕하세요! 계약서 관련 질문이 있으시면 언제든 물어보세요. 
+            예를 들어 "계약서 작성 시 주의사항은?", "부동산 임대차 계약서의 핵심 조항은?" 등입니다.
+        </div>
+    `;
+    chatHistory = [];
+}
+</script>
+{% endblock %} 

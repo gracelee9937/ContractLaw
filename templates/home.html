@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}홈 - Argent AI {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Contract Law</h1>
+    </div>
+    <p>AI 기반 계약서 분석 및 법률 자문 시스템입니다.</p>
+    <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+        <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+            <strong>주의사항:</strong> 
+            AI 응답은 참고용이며, 법률 전문가의 검토를 대체하지 않습니다.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">주요 기능</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">AI 챗봇</h3>
+            <p>계약서 관련 질문에 대해 AI가 답변을 제공합니다.</p>
+            <a href="{{ url_for('chatbot') }}" class="btn btn-primary">챗봇 시작</a>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">계약서 분석</h3>
+            <p>업로드한 계약서를 분석하여 위험 요소와 개선점을 제시합니다.</p>
+            <a href="{{ url_for('analyzer') }}" class="btn btn-primary">분석 시작</a>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px;">
+            <h3 style="color: #1F4E79; margin-bottom: 1rem;">계약서 템플릿</h3>
+            <p>다양한 계약서 템플릿을 제공합니다.</p>
+            <a href="{{ url_for('templates') }}" class="btn btn-primary">템플릿 보기</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">계약서 카테고리</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>부동산</h4>
+            <p>매매, 임대차, 개발</p>
+        </div>
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>고용</h4>
+            <p>고용계약, 인사관리</p>
+        </div>
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>기업</h4>
+            <p>투자, 주식, 경영</p>
+        </div>
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>금전거래</h4>
+            <p>대차, 채권채무</p>
+        </div>
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>용역</h4>
+            <p>컨설팅, 지적재산권</p>
+        </div>
+        <div style="padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+            <h4>기타</h4>
+            <p>표준약관, 기타계약</p>
+        </div>
+    </div>
+</div>
+{% endblock %} 
